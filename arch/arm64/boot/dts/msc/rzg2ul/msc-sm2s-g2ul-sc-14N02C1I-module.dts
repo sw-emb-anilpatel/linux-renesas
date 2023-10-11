@@ -1,0 +1,231 @@
+/*
+ * Copyright (C) 2023 Avnet Embedded GmbH
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation version 2.
+ *
+ * This program is distributed "as is" WITHOUT ANY WARRANTY of any
+ * kind, whether express or implied; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+/dts-v1/;
+#include "msc-sm2s-g2ul-dv1-module.dtsi"
+
+/ {
+	memory@48000000 {
+                device_type = "memory";
+                /* first 128MB is reserved for secure area. */
+                reg = <0x0 0x48000000 0x0 0x78000000>;
+        };
+
+        reserved-memory {
+                #address-cells = <2>;
+                #size-cells = <2>;
+                ranges;
+
+                global_cma: linux,cma@58000000 {
+                        compatible = "shared-dma-pool";
+                        linux,cma-default;
+                        reusable;
+                        reg = <0x0 0x58000000 0x0 0x10000000>;
+                };
+                mmp_reserved: linux,multimedia {
+                        compatible = "shared-dma-pool";
+                        reusable;
+                        reg = <0x00000000 0x68000000 0x0 0x8000000>;
+                };
+        };
+
+	wlan_pwrseq: wlan_pwrseq {
+		compatible = "mmc-pwrseq-simple";
+		reset-gpios = <&exp2 11 GPIO_ACTIVE_LOW>;  /* WIFI_EN_DEV */
+		clocks = <&osc_32k>;
+		clock-names = "ext_clock";
+		post-power-on-delay-ms = <80>;
+	};
+
+	vccq_sdhi0: regulator-vccq-sdhi0 {
+		compatible = "regulator-fixed";
+		regulator-name = "SDHI0 VccQ";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		vin-supply = <&ldo2>;
+		regulator-always-on;
+	};
+
+	osc_32k: osc_32k {
+		compatible = "fixed-clock";
+		#clock-cells = <0>;
+		clock-frequency = <32768>;
+		clock-output-names = "osc_32k";
+	};
+}
+
+&pinctrl {
+	du_pins: du {
+		data {
+			pinmux = <RZG2L_PORT_PINMUX(13, 0, 6)>,
+				<RZG2L_PORT_PINMUX(13, 4, 6)>,
+				<RZG2L_PORT_PINMUX(13, 3, 6)>,
+				<RZG2L_PORT_PINMUX(12, 1, 6)>,
+				<RZG2L_PORT_PINMUX(13, 2, 6)>,
+				<RZG2L_PORT_PINMUX(14, 0, 6)>,
+				<RZG2L_PORT_PINMUX(16, 0, 6)>,
+				<RZG2L_PORT_PINMUX(15, 0, 6)>,
+				<RZG2L_PORT_PINMUX(16, 1, 6)>,
+				<RZG2L_PORT_PINMUX(15, 1, 6)>,
+				<RZG2L_PORT_PINMUX(15, 3, 6)>,
+				<RZG2L_PORT_PINMUX(18, 0, 6)>,
+				<RZG2L_PORT_PINMUX(17, 2, 6)>,
+				<RZG2L_PORT_PINMUX(17, 1, 6)>,
+				<RZG2L_PORT_PINMUX(18, 1, 6)>,
+				<RZG2L_PORT_PINMUX(18, 2, 6)>,
+				<RZG2L_PORT_PINMUX(17, 3, 6)>,
+				<RZG2L_PORT_PINMUX(18, 3, 6)>;
+			drive-strength = <2>;
+		};
+
+		sync {
+			pinmux = <RZG2L_PORT_PINMUX(11, 0, 6)>, /* HSYNC */
+				<RZG2L_PORT_PINMUX(12, 0, 6)>; /* VSYNC */
+			drive-strength = <2>;
+		};
+
+		de {
+			pinmux = <RZG2L_PORT_PINMUX(11, 1, 6)>; /* DE */
+			drive-strength = <2>;
+		};
+		
+		clk {
+			pinmux = <RZG2L_PORT_PINMUX(11, 3, 6)>; /* CLK */
+		};
+	};
+};
+
+&i2c2 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c2_pins>;
+	clock-frequency = <400000>;
+	status="okay";
+
+	pmic1: pmic@30 {
+		compatible = "ricoh,rn5t567";
+		reg = <0x30>;
+		pmic-id = <0>;
+		sleep-sequence = /bits/ 8 <
+					0x16    0x2b
+					0x17    0x49
+					0x1b    0x2b
+					0x1c    0x67
+					0x1f    0x0b
+					0x32    0x03
+					0x30    0x03
+				>;
+
+		regulators {
+			dcdc1:DCDC1 {
+					regulator-name = "VCC_DRAM_VPU_0V9";
+					regulator-always-on;
+					regulator-min-microvolt = <900000>;
+					regulator-max-microvolt = <1200000>;
+			};
+
+			dcdc2:DCDC2 {
+					regulator-name = "VCC_ARM_0V9";
+					regulator-always-on;
+					regulator-min-microvolt = <3000000>;
+					regulator-max-microvolt = <3300000>;
+			};
+
+			dcdc3:DCDC3 {
+					regulator-name = "VCC_DDR_1V2";
+					regulator-always-on;
+					regulator-min-microvolt = <900000>;
+					regulator-max-microvolt = <1200000>;
+			};
+
+			dcdc4:DCDC4 {
+					regulator-name = "VCC_SYS_1V8";
+					regulator-always-on;
+					regulator-min-microvolt = <1600000>;
+					regulator-max-microvolt = <1800000>;
+			};
+
+			ldo1:LDO1 {
+					regulator-name = "VCC_PHY_2V5";
+					regulator-always-on;
+					regulator-min-microvolt = <2000000>;
+					regulator-max-microvolt = <2500000>;
+			};
+
+			ldo2:LDO2 {
+					regulator-name = "VCC_LDO2_3V3";
+					regulator-always-on;
+					regulator-min-microvolt = <3300000>;
+					regulator-max-microvolt = <3300000>;
+			};
+
+			ldo3:LDO3 {
+					regulator-name = "VCC_LDO3_1V0";
+					regulator-always-on;
+					regulator-min-microvolt = <900000>;
+					regulator-max-microvolt = <1000000>;
+			};
+		};
+	};
+
+	exp1: gpio@22 {
+			compatible = "ti,tca6424";
+			reg = <0x22>;
+			gpio-controller;
+			#gpio-cells = <2>;
+	};
+
+	exp2: gpio@23 {
+			compatible = "ti,tca6424";
+			reg = <0x23>;
+			gpio-controller;
+			#gpio-cells = <2>;
+	};
+
+	tmp103: tmp103@75 {
+			compatible = "ti,tmp103";
+			reg = <0x75>;
+	};
+
+	sys_rtc: rtc@32 {
+			compatible = "microcrystal,rv8803";
+			reg = <0x32>;
+	};
+
+};
+
+&sdhi0 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	pinctrl-0 = <&sdhi0_pins>;
+	pinctrl-names = "default";
+	vmmc-supply = <&vdd_sd0>;
+	vqmmc-supply = <&vccq_sdhi0>;
+	bus-width = <4>;
+	no-1-8-v;	/* force 3.3V VIO */
+	non-removable;
+	disable-wp;
+	mmc-pwrseq = <&wlan_pwrseq>;
+	pm-ignore-notify;
+	cap-power-off-card;
+	/* WiFi firmware requires power to be kept while in suspend */
+	keep-power-in-suspend;
+
+	status = "okay";
+
+	brcmf: bcrmf@1 {
+		reg = <1>;
+		compatible = "brcm,bcm4329-fmac";
+	};
+};
