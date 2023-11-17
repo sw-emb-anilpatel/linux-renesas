@@ -63,7 +63,7 @@
 	};
 
 	fragment@1002 {
-		target = <&mcu_i2c0>;
+		target = <&i2c0>;
 		__overlay__ {
 			da7213_codec: da7212@1a {
 				#sound-dai-cells = <0>;

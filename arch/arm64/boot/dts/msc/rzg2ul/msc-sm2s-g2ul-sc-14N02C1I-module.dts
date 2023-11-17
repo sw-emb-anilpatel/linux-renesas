@@ -205,6 +205,22 @@
 
 };
 
+/* BT_UART */
+&scif2 {
+        pinctrl-0 = <&scif2_pins>;
+        pinctrl-names = "default";
+        uart-has-rtscts;
+        /* resets = <&bt_reset>;*/
+        status = "okay";
+        bluetooth {
+                compatible = "brcm,bcm43438-bt";
+                shutdown-gpios = <&exp2 10 GPIO_ACTIVE_HIGH>;
+                clocks = <&osc_32k>;
+                clock-names = "extclk";
+                max-speed = <2000000>;
+        };
+};
+
 &sdhi0 {
 	#address-cells = <1>;
 	#size-cells = <0>;
@@ -228,4 +244,8 @@
 		reg = <1>;
 		compatible = "brcm,bcm4329-fmac";
 	};
+};
+
+&du {
+	status = "okay";
 };

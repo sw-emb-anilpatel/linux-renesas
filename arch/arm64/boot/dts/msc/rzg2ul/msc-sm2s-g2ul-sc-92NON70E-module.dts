@@ -17,8 +17,10 @@
 / {	
 	memory@48000000 {
                 device_type = "memory";
-                /* first 128MB is reserved for secure area. */
-                reg = <0x0 0x48000000 0x0 0x18000000>;
+                /* first 128MB is reserved for secure area.
+                reg = <0x0 0x48000000 0x0 0x18000000>;*/
+		/* first 2MB is reserved */
+                reg = <0x0 0x40200000 0x0 0x1FE00000>;
         };
 
         reserved-memory {
@@ -192,3 +194,11 @@
 	disable-wp;
 };
 
+/* BT_UART */
+&scif2 {
+        pinctrl-0 = <&scif2_pins>;
+        pinctrl-names = "default";
+        uart-has-rtscts;
+        /* resets = <&bt_reset>;*/
+        status = "okay";
+};

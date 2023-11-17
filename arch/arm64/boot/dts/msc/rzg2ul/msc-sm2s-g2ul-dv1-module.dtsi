@@ -13,7 +13,7 @@
 
 
 /dts-v1/;
-#include "../../renesas/r9a07g043u11.dtsi"
+#include "../../renesas/r9a07g043.dtsi"
 #include <dt-bindings/pinctrl/rzg2l-pinctrl.h>
 #include <dt-bindings/gpio/gpio.h>
 #include <dt-bindings/net/ti-dp83867.h>
@@ -35,41 +35,10 @@
 		ethernet0 = &eth0;
 	};
 
-    	model = "Evaluation board based on r9a07g043u11";
-	compatible = "renesas,r9a07g043u11-smarc",
-	             "renesas,r9a07g043",
-		         "renesas,r9a07g043u11";
-
 	chosen {
 		bootargs = "ignore_loglevel";
 		stdout-path = "serial0:115200n8";
 	};
-
-	/*
-    	memory@48000000 {
-		device_type = "memory";
-		/* first 128MB is reserved for secure area. */
-		/*reg = <0x0 0x48000000 0x0 0x38000000>;
-	};
-
-	reserved-memory {
-		#address-cells = <2>;
-		#size-cells = <2>;
-		ranges;
-
-		global_cma: linux,cma@58000000 {
-			compatible = "shared-dma-pool";
-			linux,cma-default;
-			reusable;
-			reg = <0x0 0x58000000 0x0 0x10000000>;
-		};
-		mmp_reserved: linux,multimedia {
-			compatible = "shared-dma-pool";
-			reusable;
-			reg = <0x00000000 0x68000000 0x0 0x8000000>;
-		};
-	};
-	*/
 
 	mmngr {
 		compatible = "renesas,mmngr";
@@ -401,23 +370,6 @@
 	pinctrl-names = "default";
 	uart-has-rtscts;
 	status = "okay";
-};
-
-/* BT_UART */
-&scif2 {
-	pinctrl-0 = <&scif2_pins>;
-	pinctrl-names = "default";
-	uart-has-rtscts;
-	/* resets = <&bt_reset>;*/
-	status = "okay";
-
-	bluetooth {
-		compatible = "brcm,bcm43438-bt";
-		shutdown-gpios = <&exp2 10 GPIO_ACTIVE_HIGH>;
-		clocks = <&osc_32k>;
-		clock-names = "extclk";
-		max-speed = <2000000>;
-	};
 };
 
 &scif4 {
