@@ -17,10 +17,10 @@
 / {	
 	memory@48000000 {
                 device_type = "memory";
-                /* first 128MB is reserved for secure area.
-                reg = <0x0 0x48000000 0x0 0x18000000>;*/
-		/* first 2MB is reserved */
-                reg = <0x0 0x40200000 0x0 0x1FE00000>;
+                first 128MB is reserved for secure area.
+                reg = <0x0 0x48000000 0x0 0x18000000>;
+		/* first 2MB is reserved
+                reg = <0x0 0x40200000 0x0 0x1FE00000>;*/
         };
 
         reserved-memory {
@@ -49,7 +49,7 @@
 		regulator-max-microvolt = <1800000>;
 		vin-supply = <&ldo2>;
 	};
-}
+};
 
 &pinctrl {
 	ssi0_pins: ssi0 {
