@@ -17,7 +17,7 @@
 / {	
 	memory@48000000 {
                 device_type = "memory";
-                first 128MB is reserved for secure area.
+                /*first 128MB is reserved for secure area.*/
                 reg = <0x0 0x48000000 0x0 0x18000000>;
 		/* first 2MB is reserved
                 reg = <0x0 0x40200000 0x0 0x1FE00000>;*/
