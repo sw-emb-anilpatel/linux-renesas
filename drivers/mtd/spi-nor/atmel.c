@@ -66,6 +66,7 @@ static const struct flash_info atmel_parts[] = {
 	{ "at25df321",  INFO(0x1f4700, 0, 64 * 1024,  64, SECT_4K | SPI_NOR_HAS_LOCK) },
 	{ "at25df321a", INFO(0x1f4701, 0, 64 * 1024,  64, SECT_4K | SPI_NOR_HAS_LOCK) },
 	{ "at25df641",  INFO(0x1f4800, 0, 64 * 1024, 128, SECT_4K | SPI_NOR_HAS_LOCK) },
+	{ "at25sf321", INFO(0x1f8701, 0, 64 * 1024, 64, SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
 
 	/* Dialog */
 	{ "at25ql128a",	 INFO(0x1f4218, 0, 64 * 1024,  256, SECT_4K | SPI_NOR_QUAD_READ) },
