@@ -1,0 +1,204 @@
+/*
+ * Copyright (C) 2023 Avnet Embedded GmbH
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation version 2.
+ *
+ * This program is distributed "as is" WITHOUT ANY WARRANTY of any
+ * kind, whether express or implied; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+/dts-v1/;
+#include "msc-sm2s-g2ul-dv1-module.dtsi"
+
+/ {
+	model = "Renesas SMARC EVK based on r9a07g043u11";
+	compatible = "renesas,smarc-evk", "renesas,r9a07g043u11", "renesas,r9a07g043";
+
+	memory@48000000 {
+				device_type = "memory";
+				/* first 128MB is reserved for secure area. */
+				reg = <0x0 0x48000000 0x0 0x18000000>;
+		};
+
+		reserved-memory {
+				#address-cells = <2>;
+				#size-cells = <2>;
+				ranges;
+
+				global_cma: linux,cma@58000000 {
+						compatible = "shared-dma-pool";
+						linux,cma-default;
+						reusable;
+						reg = <0x0 0x58000000 0x0 0x1000000>;
+				};
+				mmp_reserved: linux,multimedia {
+						compatible = "shared-dma-pool";
+						reusable;
+						reg = <0x00000000 0x59000000 0x0 0x1000000>;
+				};
+		};
+
+	/* For SD Card we use USH mode and use 1.8 V */
+	vccq_sdhi0: regulator-vccq-sdhi0 {
+		compatible = "regulator-fixed";
+		regulator-name = "SDHI0 VccQ";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		vin-supply = <&ldo2>;
+	};
+};
+
+&pinctrl {
+	ssi0_pins: ssi0 {
+		pinmux = <RZG2L_PORT_PINMUX(11, 0, 1)>, /* SSI0_BCK */
+			<RZG2L_PORT_PINMUX(11, 1, 1)>, /* SSI0_RCK */
+			<RZG2L_PORT_PINMUX(11, 2, 1)>, /* SSI0_TXD */
+			<RZG2L_PORT_PINMUX(11, 3, 1)>; /*SSI0_RXD*/
+	};
+
+	canfd1_pins: can1 {
+		pinmux = <RZG2L_PORT_PINMUX(14, 0, 3)>,
+			<RZG2L_PORT_PINMUX(14, 1, 3)>;
+	};
+};
+
+&ssi0 {
+	pinctrl-0 = <&ssi0_pins>;
+	pinctrl-names = "default";
+	status = "okay";
+};
+
+&canfd {
+	pinctrl-0 = <&canfd1_pins>;
+	pinctrl-names = "default";
+	status = "okay";
+	channel1 {
+		status = "okay";
+	};
+};
+
+&i2c2 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c2_pins>;
+	clock-frequency = <400000>;
+	status="okay";
+
+	pmic1: pmic@30 {
+		compatible = "ricoh,rn5t567";
+		reg = <0x30>;
+		pmic-id = <0>;
+		sleep-sequence = /bits/ 8 <
+					0x16    0x2b
+					0x17    0x49
+					0x1b    0x2b
+					0x1c    0x67
+					0x1f    0x0b
+					0x32    0x03
+					0x30    0x03
+				>;
+		regulators {
+
+			dcdc1:DCDC1 {
+					regulator-name = "VCC_DRAM_VPU_0V9";
+					regulator-always-on;
+					regulator-min-microvolt = <900000>;
+					regulator-max-microvolt = <1200000>;
+			};
+
+			dcdc2:DCDC2 {
+					regulator-name = "VCC_ARM_0V9";
+					regulator-always-on;
+					regulator-min-microvolt = <3000000>;
+					regulator-max-microvolt = <3300000>;
+			};
+
+			dcdc3:DCDC3 {
+					regulator-name = "VCC_DDR_1V2";
+					regulator-always-on;
+					regulator-min-microvolt = <900000>;
+					regulator-max-microvolt = <1200000>;
+			};
+
+			dcdc4:DCDC4 {
+					regulator-name = "VCC_SYS_1V8";
+					regulator-always-on;
+					regulator-min-microvolt = <1600000>;
+					regulator-max-microvolt = <1800000>;
+			};
+
+			ldo1:LDO1 {
+					regulator-name = "VCC_PHY_2V5";
+					regulator-always-on;
+					regulator-min-microvolt = <2000000>;
+					regulator-max-microvolt = <2500000>;
+			};
+
+			/* For SD Card we use USH mode and use 1.8 V */
+			ldo2:LDO2 {
+					regulator-name = "VCC_LDO2_1V8";
+					regulator-always-on;
+					regulator-min-microvolt = <1800000>;
+					regulator-max-microvolt = <1800000>;
+			};
+
+			ldo3:LDO3 {
+					regulator-name = "VCC_LDO3_1V0";
+					regulator-always-on;
+					regulator-min-microvolt = <900000>;
+					regulator-max-microvolt = <1000000>;
+			};
+		};
+	};
+
+	exp1: gpio@22 {
+			compatible = "ti,tca6424";
+			reg = <0x22>;
+			gpio-controller;
+			#gpio-cells = <2>;
+	};
+
+	exp2: gpio@23 {
+			compatible = "ti,tca6424";
+			reg = <0x23>;
+			gpio-controller;
+			#gpio-cells = <2>;
+	};
+
+	tmp103: tmp103@75 {
+			compatible = "ti,tmp103";
+			reg = <0x75>;
+	};
+
+	sys_rtc: rtc@32 {
+			compatible = "microcrystal,rv8803";
+			reg = <0x32>;
+	};
+};
+
+&sdhi0 {
+	pinctrl-0 = <&sdhi0_pins>;
+	pinctrl-1 = <&sdhi0_pins_uhs>;
+	pinctrl-names = "default", "state_uhs";
+	vmmc-supply = <&vdd_sd0>;
+	vqmmc-supply = <&vccq_sdhi0>;
+	bus-width = <4>;
+	/*sd-uhs-sdr50;*/
+	sd-uhs-sdr104;
+	status = "okay";
+	disable-wp;
+};
+
+/* BT_UART */
+&scif2 {
+		pinctrl-0 = <&scif2_pins>;
+		pinctrl-names = "default";
+		uart-has-rtscts;
+		/* resets = <&bt_reset>;*/
+		status = "okay";
+};
