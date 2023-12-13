@@ -1,0 +1,56 @@
+/*
+ * Copyright (C) 2023 Avnet Embedded GmbH
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation version 2.
+ *
+ * This program is distributed "as is" WITHOUT ANY WARRANTY of any
+ * kind, whether express or implied; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+/dts-v1/;
+#include "../../renesas/r9a07g044.dtsi"
+#include "msc-sm2s-rzg2l-dv1-module.dtsi"
+
+/ {
+	memory@48000000 {                                     
+		device_type = "memory";                       
+		/* first 128MB is reserved for secure area. */
+		reg = <0x0 0x40200000 0x0 0x18000000>;       // changed 0x48000000 to 0x40200000 for starting address from 128 MB to 2 MB & 0x78000000 to 0x18000000 for 2GB to 500MB
+	};                                                    
+
+	reserved-memory {                                           
+		#address-cells = <2>;                               
+		#size-cells = <2>;                                  
+		ranges;                                             
+
+		global_cma: linux,cma@58000000 {                    
+			compatible = "shared-dma-pool";             
+			linux,cma-default;                          
+		    	reusable;                                   
+		    	reg = <0x0 0x58000000 0x0 0x1000000>;      
+		};                                                  
+		mmp_reserved: linux,multimedia {                    
+			compatible = "shared-dma-pool";             
+		      	reusable;                                   
+		      	reg = <0x00000000 0x59000000 0x0 0x1000000>;
+	      	};                                                  
+	};                                                          
+
+	mmngr {                                                     
+		compatible = "renesas,mmngr";                       
+		memory-region = <&mmp_reserved>;                    
+	};                                                          
+
+	mmngrbuf {                                                  
+		compatible = "renesas,mmngrbuf";                    
+	};                                                          
+
+	vspm_if {                                                   
+		compatible = "renesas,vspm_if";                     
+	};                                                          
+
+};
