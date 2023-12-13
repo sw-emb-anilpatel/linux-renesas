@@ -12,4 +12,5 @@
 #
 
 subdir-y += rzg2ul
+subdir-y += rzv2l
 
