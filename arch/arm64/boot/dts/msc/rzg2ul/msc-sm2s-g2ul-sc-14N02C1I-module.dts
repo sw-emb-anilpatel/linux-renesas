@@ -230,28 +230,19 @@
 };
 
 &sdhi0 {
-	#address-cells = <1>;
-	#size-cells = <0>;
-	pinctrl-0 = <&sdhi0_pins>;
-	pinctrl-names = "default";
-	vmmc-supply = <&vdd_sd0>;
-	vqmmc-supply = <&vccq_sdhi0>;
-	bus-width = <4>;
-	no-1-8-v;	/* force 3.3V VIO */
-	non-removable;
-	disable-wp;
-	mmc-pwrseq = <&wlan_pwrseq>;
-	pm-ignore-notify;
-	cap-power-off-card;
-	/* WiFi firmware requires power to be kept while in suspend */
-	keep-power-in-suspend;
-
-	status = "okay";
-
-	brcmf: bcrmf@1 {
-		reg = <1>;
-		compatible = "brcm,bcm4329-fmac";
-	};
+        pinctrl-0 = <&sdhi0_pins>;
+        pinctrl-1 = <&sdhi0_pins_uhs>;
+        pinctrl-names = "default", "state_uhs";
+        vmmc-supply = <&vdd_sd0>;
+        vqmmc-supply = <&vccq_sdhi0>;
+        bus-width = <4>;
+        /*sd-uhs-sdr50;*/
+        /*sd-uhs-sdr104;*/
+        wp-gpios = <&exp2 8 GPIO_ACTIVE_LOW>; /* SD0_WP */
+        cd-gpios = <&exp2 9 GPIO_ACTIVE_LOW>; /* SD0_CD */
+        no-1-8-v;
+        status = "okay";
+        disable-wp;
 };
 
 &du {

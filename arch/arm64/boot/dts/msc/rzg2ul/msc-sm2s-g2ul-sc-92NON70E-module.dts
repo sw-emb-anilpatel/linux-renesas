@@ -46,8 +46,8 @@
 	vccq_sdhi0: regulator-vccq-sdhi0 {
 		compatible = "regulator-fixed";
 		regulator-name = "SDHI0 VccQ";
-		regulator-min-microvolt = <1800000>;
-		regulator-max-microvolt = <1800000>;
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
 		vin-supply = <&ldo2>;
 	};
 };
@@ -143,8 +143,8 @@
 			ldo2:LDO2 {
 					regulator-name = "VCC_LDO2_1V8";
 					regulator-always-on;
-					regulator-min-microvolt = <1800000>;
-					regulator-max-microvolt = <1800000>;
+					regulator-min-microvolt = <3300000>;
+					regulator-max-microvolt = <3300000>;
 			};
 
 			ldo3:LDO3 {
@@ -188,16 +188,19 @@
 };
 
 &sdhi0 {
-	pinctrl-0 = <&sdhi0_pins>;
-	pinctrl-1 = <&sdhi0_pins_uhs>;
-	pinctrl-names = "default", "state_uhs";
-	vmmc-supply = <&vdd_sd0>;
-	vqmmc-supply = <&vccq_sdhi0>;
-	bus-width = <4>;
-	/*sd-uhs-sdr50;*/
-	sd-uhs-sdr104;
-	status = "okay";
-	disable-wp;
+        pinctrl-0 = <&sdhi0_pins>;
+        pinctrl-1 = <&sdhi0_pins_uhs>;
+        pinctrl-names = "default", "state_uhs";
+        vmmc-supply = <&vdd_sd0>;
+        vqmmc-supply = <&vccq_sdhi0>;
+        bus-width = <4>;
+        /*sd-uhs-sdr50;*/
+        /*sd-uhs-sdr104;*/
+        wp-gpios = <&exp2 8 GPIO_ACTIVE_LOW>; /* SD0_WP */
+        cd-gpios = <&exp2 9 GPIO_ACTIVE_LOW>; /* SD0_CD */
+        no-1-8-v;
+        status = "okay";
+        disable-wp;
 };
 
 /* BT_UART */
