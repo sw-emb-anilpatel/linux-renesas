@@ -49,6 +49,8 @@
 		regulator-min-microvolt = <3300000>;
 		regulator-max-microvolt = <3300000>;
 		vin-supply = <&ldo2>;
+		regulator-always-on;
+                regulator-boot-on;
 	};
 };
 
@@ -192,7 +194,6 @@
         /*sd-uhs-sdr104;*/
         wp-gpios = <&exp2 8 GPIO_ACTIVE_LOW>; /* SD0_WP */
         cd-gpios = <&exp2 9 GPIO_ACTIVE_LOW>; /* SD0_CD */
-        no-1-8-v;
         status = "okay";
         disable-wp;
 };
