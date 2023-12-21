@@ -17,8 +17,6 @@
 #include <dt-bindings/clock/r9a07g054-cpg.h>         
 #include <dt-bindings/net/ti-dp83867.h>
 
-#define WIFI_EN 1
-
 / {
 	aliases {
 		ethernet0 = &eth0;
@@ -120,57 +118,6 @@
 		status = "okay";
 	};
 
-#if WIFI_EN
-	/*bt_reset: bt-reset {
-		compatible = "gpio-reset";
-		reset-gpios = <&pinctrl RZG2L_GPIO(42, 4) GPIO_ACTIVE_LOW>;  // BT_EN_DEV
-		reset-delay-us = <1000>;
-		#reset-cells = <0>;
-	};*/
-
-	bluetooth: bluetooth {
-		compatible = "brcm,bcm43438-bt";
-		reset-gpios = <&pinctrl RZG2L_GPIO(42, 4) GPIO_ACTIVE_LOW>;  // BT_EN_DEV
-		clocks = <&osc_32k>;
-		clock-names = "extclk";
-		max-speed = <2000000>;
-	};
-
-	wlan_pwrseq: wlan_pwrseq {
-		compatible = "mmc-pwrseq-simple";
-		reset-gpios = <&pinctrl RZG2L_GPIO(43, 0) GPIO_ACTIVE_LOW>;  // WIFI_EN_DEV
-		clocks = <&osc_32k>;
-		clock-names = "ext_clock";
-		post-power-on-delay-ms = <80>;
-	};
-
-	osc_32k: osc_32k {
-        	compatible = "fixed-clock";
-        	#clock-cells = <0>;
-        	clock-frequency = <32768>;
-        	clock-output-names = "osc_32k";
-	};
-	
-	//vccq_sdhi0: regulator-vccq-sdhi0 {
-	//	compatible = "regulator-gpio";
-
-	//	regulator-name = "SDHI0 VccQ";
-	//	regulator-min-microvolt = <1800000>;
-	//	regulator-max-microvolt = <3300000>;
-	//	gpios-states = <1>;
-	//	states = <3300000 1
-        //  		1800000 0>;
-	//};
-
-	vccq_sdhi0: regulator-vccq-sdhi0 {
-		compatible = "regulator-fixed";
-		regulator-name = "SDHI0 VccQ";
-		regulator-min-microvolt = <3300000>;
-		regulator-max-microvolt = <3300000>;
-		vin-supply = <&ldo2>;
-		regulator-always-on;
-	};
-#else
 	/* For SD Card we use UHS mode and use 1.8 V */
 	vccq_sdhi0: regulator-vccq-sdhi0 {
 		compatible = "regulator-fixed";
@@ -179,7 +126,6 @@
 		regulator-max-microvolt = <1800000>;
 		vin-supply = <&ldo2>;
 	};
-#endif
 
 	clk_ext_camera: clk_ext_camera {
 		compatible = "fixed-clock";
@@ -786,35 +732,6 @@
 
 };
 
-#if WIFI_EN
-//WiFi
-&sdhi0 {
-        #address-cells = <1>;
-        #size-cells = <0>;
-        pinctrl-0 = <&sdhi0_pins>;
-        pinctrl-names = "default";
-        vmmc-supply = <&reg_3p3v>;
-        vqmmc-supply = <&vccq_sdhi0>;
-        bus-width = <4>;
-        no-1-8-v;       /* force 3.3V VIO */
-        non-removable;
-        disable-wp;
-        mmc-pwrseq = <&wlan_pwrseq>;
-        pm-ignore-notify;
-        cap-power-off-card;
-        /* WiFi firmware requires power to be kept while in suspend */
-        keep-power-in-suspend;
-
-        status = "okay";
-
-        brcmf: bcrmf@1 {
-                reg = <1>;
-                compatible = "brcm,bcm4329-fmac";
-        };
-};
-
-#else
-
 &sdhi0 {
 	pinctrl-0 = <&sdhi0_pins>;
 	pinctrl-1 = <&sdhi0_pins_uhs>;
@@ -828,8 +745,6 @@
 	status = "okay";
         disable-wp;
 };
-
-#endif
 
 &sdhi1 {
 	pinctrl-0 = <&sdhi1_emmc_pins>;
@@ -929,14 +844,6 @@
         	                regulator-max-microvolt = <2500000>;
         	        };
 
-#if WIFI_EN
-			ldo2:LDO2 {
-				regulator-name = "VCC_LDO2_3V3";
-				regulator-always-on;
-				regulator-min-microvolt = <3300000>;
-				regulator-max-microvolt = <3300000>;
-			};
-#else
 			/* For SD Card we use USH mode and use 1.8 V */
 			ldo2:LDO2 {
 				regulator-name = "VCC_LDO2_1V8";
@@ -944,7 +851,6 @@
 				regulator-min-microvolt = <1800000>;
 				regulator-max-microvolt = <1800000>;
 			};
-#endif
 			
 			ldo3:LDO3 {
 				regulator-name = "VCC_LDO3_1V0";
