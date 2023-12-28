@@ -70,6 +70,14 @@
         vspm_if {
                 compatible = "renesas,vspm_if";
         };
+
+	backlight: pwm-backlight {
+		status = "disabled";
+	};
+
+	lvds_panel: lvds {
+		status = "disabled";
+	};
 };
 
 &ehci0 {
@@ -86,4 +94,8 @@
 
 &ohci1 {
         memory-region = <&global_cma>;
+};
+
+&dsi0 {
+	status = "disabled";
 };

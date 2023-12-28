@@ -897,6 +897,10 @@
 		reg = <0x2e>;
 		status = "okay";
 	};
+
+	dsi_lvds_bridge: sn65dsi84@2d {
+		status = "disabled";
+	};
 };
 
 &ssi1 {                                                             

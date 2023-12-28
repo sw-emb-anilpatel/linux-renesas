@@ -132,20 +132,18 @@
 					#address-cells = <1>;
 					#size-cells = <0>;
 
+					port@2 {
+                                                reg = <2>;
+                                                bridge_out: endpoint {
+                                                        remote-endpoint = <&lvds_in>;
+                                                };
+                                        };
+
 					port@0 {
 						reg = <0>;
-
 						bridge_in: endpoint {
 							remote-endpoint = <&dsi0_out>;
 							data-lanes = <1 2 3 4>;
-						};
-					};
-
-					port@2 {
-						reg = <2>;
-
-						bridge_out: endpoint {
-							remote-endpoint = <&lvds_in>;
 						};
 					};
         			};
