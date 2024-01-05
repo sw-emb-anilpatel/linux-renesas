@@ -18,7 +18,7 @@
 / {
 	fragment@4000 {
 			target-path = "/";
-			overlay {
+			__overlay__ {
 				panel {
 					compatible = "panel-lvds";
 					width-mm = <154>;
@@ -50,7 +50,7 @@
 
 	fragment@4001 {
 		target = <&du>;
-		overlay {
+		__overlay__ {
 			pinctrl-0 = <&du_pins>;
 			pinctrl-names = "default";
 			status = "okay";
