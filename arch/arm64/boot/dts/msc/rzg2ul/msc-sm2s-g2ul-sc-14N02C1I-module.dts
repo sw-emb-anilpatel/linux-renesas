@@ -66,6 +66,14 @@
 		clock-frequency = <32768>;
 		clock-output-names = "osc_32k";
 	};
+
+	wlan_pwrseq: wlan_pwrseq {
+                compatible = "mmc-pwrseq-simple";
+                reset-gpios = <&exp2 11 GPIO_ACTIVE_LOW>;  /* WIFI_EN_DEV */
+                clocks = <&osc_32k>;
+                clock-names = "ext_clock";
+                post-power-on-delay-ms = <80>;
+        };
 };
 
 &pinctrl {
