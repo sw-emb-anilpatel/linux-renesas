@@ -32,12 +32,13 @@
 		i2c1 = &i2c1;
 		i2c2 = &i2c2;
 		serial0 = &scif0;
+		serial1 = &scif1;
 		ethernet0 = &eth0;
 	};
 
 	chosen {
 		bootargs = "ignore_loglevel";
-		stdout-path = "serial0:115200n8";
+		stdout-path = "serial1:115200n8";
 	};
 
 	mmngr {
@@ -389,7 +390,7 @@
 &scif1 {
 	pinctrl-0 = <&scif1_pins>;
 	pinctrl-names = "default";
-	uart-has-rtscts;
+	/*uart-has-rtscts;*/
 	status = "okay";
 };
 
@@ -564,11 +565,9 @@
 	};
 
 	scif1_pins: scif1 {
-			pinmux = <RZG2L_PORT_PINMUX(8, 0, 3)>, /* SCIF1_RXD */
-					<RZG2L_PORT_PINMUX(8, 1, 3)>,/*SCIF1_TXD*/
-					<RZG2L_PORT_PINMUX(8, 2, 3)>, /*SCIF1_CTS*/
-					<RZG2L_PORT_PINMUX(8, 3, 3)>; /*SCIF1_RTS*/
-	};
+                        pinmux = <RZG2L_PORT_PINMUX(8, 0, 3)>, /* SCIF1_RXD */
+                                        <RZG2L_PORT_PINMUX(8, 1, 3)>;/*SCIF1_TXD*/
+        };
 
 	scif2_pins: scif2 {
 		pinmux = <RZG2L_PORT_PINMUX(5, 0, 2)>, /* SCIF2_TXD */
