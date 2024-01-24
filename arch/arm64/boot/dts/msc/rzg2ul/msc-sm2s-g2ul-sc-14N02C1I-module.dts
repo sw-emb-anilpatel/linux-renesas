@@ -196,6 +196,10 @@
 			reg = <0x22>;
 			gpio-controller;
 			#gpio-cells = <2>;
+			interrupt-parent = <&pinctrl>;
+                        interrupts = <1 IRQ_TYPE_EDGE_FALLING>, /* GPIO 1 interrupt line */
+                        		<3 IRQ_TYPE_EDGE_FALLING>, /* GPIO 3 interrupt line */
+                        		<7 IRQ_TYPE_EDGE_FALLING>; /* GPIO 7 interrupt line */
 	};
 
 	exp2: gpio@23 {
