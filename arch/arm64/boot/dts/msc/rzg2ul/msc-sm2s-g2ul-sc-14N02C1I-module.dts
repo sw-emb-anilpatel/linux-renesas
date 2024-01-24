@@ -203,6 +203,8 @@
 			reg = <0x23>;
 			gpio-controller;
 			#gpio-cells = <2>;
+			interrupt-parent = <&pinctrl>;
+			interrupts = <3 IRQ_TYPE_EDGE_FALLING>; /* PHY_INT# interrupt line */
 	};
 
 	tmp103: tmp103@75 {
