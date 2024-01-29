@@ -196,7 +196,7 @@
 			reg = <0x22>;
 			gpio-controller;
 			#gpio-cells = <2>;
-			interrupt-parent = <&pinctrl>;
+			interrupt-parent = <&intc_ex>;
                         interrupts = <1 IRQ_TYPE_EDGE_FALLING>, /* GPIO 1 interrupt line */
                         		<3 IRQ_TYPE_EDGE_FALLING>, /* GPIO 3 interrupt line */
                         		<7 IRQ_TYPE_EDGE_FALLING>; /* GPIO 7 interrupt line */
@@ -207,7 +207,7 @@
 			reg = <0x23>;
 			gpio-controller;
 			#gpio-cells = <2>;
-			interrupt-parent = <&pinctrl>;
+			interrupt-parent = <&intc_ex>;
 			interrupts = <3 IRQ_TYPE_EDGE_FALLING>; /* PHY_INT# interrupt line */
 	};
 

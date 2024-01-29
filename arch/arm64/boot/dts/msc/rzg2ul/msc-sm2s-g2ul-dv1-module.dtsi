@@ -713,3 +713,7 @@
 	/*pwm-params = <MTU_PWM_NORMAL 0 50>;*/
 	status = "okay";
 };
+
+&intc_ex {
+	status = "okay";
+};
