@@ -28,6 +28,7 @@
 #include <video/display_timing.h>
 #include <video/videomode.h>
 #include <video/of_display_timing.h>
+#include <linux/errno.h>
 
 struct xinli_tcxd101iblma_panel_desc {
 	const struct drm_display_mode *modes;
@@ -525,8 +526,10 @@ static int xinli_tcxd101iblma_dsi_probe(struct mipi_dsi_device *dsi)
 	dev_info(&dsi->dev, "\nprobing...\n");
 
 	tftcp->reset_gpio = devm_gpiod_get_optional(&dsi->dev, "reset", GPIOD_OUT_HIGH);
-	if (IS_ERR(tftcp->reset_gpio))
+	if (IS_ERR(tftcp->reset_gpio)) {
 		dev_err(&dsi->dev, "Couldn't get our reset GPIO\n");
+		return -EPROBE_DEFER;
+	}
 
 	ret = of_property_read_u32(dsi->dev.of_node, "dsi-lanes", &dsi->lanes);
 	if (ret < 0) {
