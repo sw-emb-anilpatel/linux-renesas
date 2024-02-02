@@ -178,7 +178,6 @@
         	regulator-always-on;
         	regulator-boot-on;
 	};
-
 };
 
 &audio_clk1{
@@ -357,6 +356,56 @@
 
 &du {
 	status = "okay";
+};
+
+&dsi0 {
+	status = "okay";
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	ports {
+		#address-cells = <1>;
+		#size-cells = <0>;
+
+		port@1 {
+			dsi0_out: endpoint {
+				remote-endpoint = <&panel_in>;
+				data-lanes = <1 2 3 4>;
+			};
+		};
+	};
+
+	panel@0 {
+		reg = <0>;
+		compatible = "xinli,tcxd101iblma";
+		reset-gpio = <&exp1 9 GPIO_ACTIVE_HIGH>;
+		status = "okay";
+		dsi-lanes = <4>;
+		width = <135>;
+		height = <216>;
+
+		display-timings {
+		    clock-frequency = <75000000>;
+		    hactive = <800>;
+		    vactive = <1280>;
+		    hsync-len = <40>;
+		    hback-porch = <20>;
+		    hfront-porch = <100>;
+		    vsync-len = <2>;
+		    vback-porch = <15>;
+		    vfront-porch = <10>;
+		    hsync-active = <0>;
+		    vsync-active = <0>;
+		    de-active = <0>;
+		    pixelclk-active = <0>;
+		};
+
+		port {
+			panel_in: endpoint {
+				remote-endpoint = <&dsi0_out>;
+			};
+		};
+	};
 };
 
 &cru {
