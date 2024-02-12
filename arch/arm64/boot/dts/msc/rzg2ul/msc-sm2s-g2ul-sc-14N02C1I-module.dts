@@ -184,6 +184,20 @@
 					regulator-min-microvolt = <900000>;
 					regulator-max-microvolt = <1000000>;
 			};
+
+			ldo4:LDO4 {
+                                        regulator-name = "VCC_CARRIER_1V8";
+                                        regulator-always-on;
+                                        regulator-min-microvolt = <1800000>;
+                                        regulator-max-microvolt = <1800000>;
+                        };
+
+			ldo5:LDO5 {
+                                        regulator-name = "VCC_CARRIER_STBY";
+                                        regulator-always-on;
+                                        regulator-min-microvolt = <1800000>;
+                                        regulator-max-microvolt = <1800000>;
+                        };
 		};
 	};
 
