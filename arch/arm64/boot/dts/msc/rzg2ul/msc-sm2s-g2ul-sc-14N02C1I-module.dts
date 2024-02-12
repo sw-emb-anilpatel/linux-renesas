@@ -130,7 +130,7 @@
 		reg = <0x30>;
 		pmic-id = <0>;
 		sleep-sequence = /bits/ 8 <
-					0x1c    0xc2
+					0x1d    0xc2
 					0x1e    0x81
 				>;
 
