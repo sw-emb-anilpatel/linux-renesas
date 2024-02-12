@@ -134,7 +134,6 @@
 					0x1f    0xc2
 					0x1e    0x81
 				>;
-		repower-time = <REPWRTIME_1000MS>;
 
 		regulators {
 			dcdc1:DCDC1 {
