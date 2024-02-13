@@ -224,6 +224,21 @@
                 };
         };
 
+	gpio_keys {
+        compatible = "gpio-keys";
+        #address-cells = <1>;
+        #size-cells = <0>;
+        autorepeat;
+
+        	P2_1 {
+            		label = "GPIO Key WAKEUP";
+            		linux,code = <143>;
+            		wakeup-source;
+            		interrupt-parent = <&pinctrl>;
+            		interrupts = <RZG2L_GPIO(2, 1) IRQ_TYPE_EDGE_FALLING>;
+            		debounce-interval = <50>;
+        	};
+    	};
 };
 
 &audio_clk1{
