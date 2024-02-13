@@ -716,5 +716,4 @@
 
 &intc_ex {
 	status = "okay";
-	wakeup-source;
 };
