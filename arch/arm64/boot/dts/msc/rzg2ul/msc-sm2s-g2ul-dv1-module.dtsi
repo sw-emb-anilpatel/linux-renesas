@@ -716,5 +716,7 @@
 
 &intc_ex {
 	status = "okay";
+	linux,code = <143>;
 	wakeup-source;
+	debounce-interval = <50>;
 };
