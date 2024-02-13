@@ -186,26 +186,22 @@
 			};
 
 			ldo4:LDO4 {
-                                        /*regulator-name = "VCC_CARRIER_1V8";
+                                        regulator-name = "VCC_CARRIER_1V8";
                                         regulator-always-on;
                                         regulator-min-microvolt = <1800000>;
-                                        regulator-max-microvolt = <1800000>;*/
-					regulator-state-standby {
+                                        regulator-max-microvolt = <1800000>;
+					regulator-state-mem {
 						regulator-off-in-suspend;
-						regulator-min-microvolt = <0>;
-                                                regulator-max-microvolt = <0>;
 					};
                         };
 
 			ldo5:LDO5 {
-                                        /*regulator-name = "VCC_CARRIER_STBY";
+                                        regulator-name = "VCC_CARRIER_STBY";
                                         regulator-always-on;
                                         regulator-min-microvolt = <1800000>;
-                                        regulator-max-microvolt = <1800000>;*/
-					regulator-state-standby {
+                                        regulator-max-microvolt = <1800000>;
+					regulator-state-mem {
                                                 regulator-off-in-suspend;
-						regulator-min-microvolt = <0>;
-						regulator-max-microvolt = <0>;
                                         };
                         };
 		};
