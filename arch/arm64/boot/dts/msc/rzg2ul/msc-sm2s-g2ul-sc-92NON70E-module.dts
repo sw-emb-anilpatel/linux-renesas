@@ -62,9 +62,11 @@
 			<RZG2L_PORT_PINMUX(11, 3, 1)>; /*SSI0_RXD*/
 	};
 
-	canfd1_pins: can1 {
+	canfd_pins: can {
 		pinmux = <RZG2L_PORT_PINMUX(14, 0, 3)>,
-			<RZG2L_PORT_PINMUX(14, 1, 3)>;
+			<RZG2L_PORT_PINMUX(14, 1, 3)>,
+			<RZG2L_PORT_PINMUX(6, 1, 3)>, /* TX */
+			<RZG2L_PORT_PINMUX(6, 2, 3)>; /* RX */
 	};
 };
 
@@ -75,12 +77,15 @@
 };
 
 &canfd {
-	pinctrl-0 = <&canfd1_pins>;
+	pinctrl-0 = <&canfd_pins>;
 	pinctrl-names = "default";
 	status = "okay";
-	channel1 {
+	channel0 {
 		status = "okay";
 	};
+	channel1 {
+                status = "okay";
+        };
 };
 
 &i2c2 {
