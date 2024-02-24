@@ -95,6 +95,7 @@
 		compatible = "ricoh,rn5t567";
 		reg = <0x30>;
 		pmic-id = <0>;
+		system-power-controller;
 		sleep-sequence = /bits/ 8 <
 					0x16    0x2b
 					0x17    0x49
@@ -154,6 +155,26 @@
 					regulator-always-on;
 					regulator-min-microvolt = <900000>;
 					regulator-max-microvolt = <1000000>;
+			};
+
+			ldo4:LDO4 {
+					regulator-name = "VCC_CARRIER_1V8";
+					regulator-always-on;
+					regulator-min-microvolt = <1800000>;
+					regulator-max-microvolt = <1800000>;
+					regulator-state-mem {
+						regulator-off-in-suspend;
+					};
+			};
+
+			ldo5:LDO5 {
+					regulator-name = "VCC_CARRIER_STBY";
+					regulator-always-on;
+					regulator-min-microvolt = <1800000>;
+					regulator-max-microvolt = <1800000>;
+					regulator-state-mem {
+						regulator-off-in-suspend;
+				};
 			};
 		};
 	};
