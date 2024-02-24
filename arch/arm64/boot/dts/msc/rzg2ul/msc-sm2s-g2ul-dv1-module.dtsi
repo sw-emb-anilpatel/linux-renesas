@@ -224,6 +224,30 @@
                 };
         };
 
+	gpio_keys {
+        compatible = "gpio-keys";
+        #address-cells = <1>;
+        #size-cells = <0>;
+        autorepeat;
+
+		P2_1 {
+			label = "GPIO Key WAKEUP";
+			linux,code = <143>;
+			wakeup-source;
+			interrupt-parent = <&pinctrl>;
+			interrupts = <RZG2L_GPIO(2, 1) IRQ_TYPE_EDGE_FALLING>;
+			debounce-interval = <50>;
+		};
+
+		NMI {
+			label = "NMI Key WAKEUP";
+			linux,code = <143>;
+			wakeup-source;
+			interrupt-parent = <&intc_ex>;
+			interrupts = <8 IRQ_TYPE_EDGE_FALLING>;
+			debounce-interval = <50>;
+		};
+	};
 };
 
 &audio_clk1{
@@ -711,5 +735,9 @@
 	clocks = <&cpg CPG_MOD R9A07G043_MTU_X_MCK_MTU3>;
 	clock-names = "fck";
 	/*pwm-params = <MTU_PWM_NORMAL 0 50>;*/
+	status = "okay";
+};
+
+&intc_ex {
 	status = "okay";
 };
