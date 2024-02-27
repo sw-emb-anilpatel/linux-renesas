@@ -102,6 +102,8 @@
 		regulator-name = "USB20_VBUS0";
 		regulator-min-microvolt = <5000000>;
 		regulator-max-microvolt = <5000000>;
+		regulator-boot-on;
+		regulator-always-on;
 	};
 
 	x1_clk: x1-clock {
