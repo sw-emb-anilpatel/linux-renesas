@@ -122,9 +122,11 @@
 	vccq_sdhi0: regulator-vccq-sdhi0 {
 		compatible = "regulator-fixed";
 		regulator-name = "SDHI0 VccQ";
-		regulator-min-microvolt = <1800000>;
-		regulator-max-microvolt = <1800000>;
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
 		vin-supply = <&ldo2>;
+		regulator-always-on;
+		regulator-boot-on;
 	};
 
 	clk_ext_camera: clk_ext_camera {
@@ -182,6 +184,21 @@
         	compatible = "linux,extcon-usb-gpio";
         	id-gpio = <&pinctrl RZG2L_GPIO(5, 1) GPIO_ACTIVE_HIGH>;
 	};*/
+
+	wlan_pwrseq: wlan_pwrseq {
+	        compatible = "mmc-pwrseq-simple";
+	        reset-gpios = <&pinctrl RZG2L_GPIO(43, 0) GPIO_ACTIVE_LOW>;  /* WIFI_EN_DEV */
+	        clocks = <&osc_32k>;
+	        clock-names = "ext_clock";
+	        post-power-on-delay-ms = <80>;
+	};
+
+	osc_32k: osc_32k {
+	        compatible = "fixed-clock";
+	        #clock-cells = <0>;
+	        clock-frequency = <32768>;
+	        clock-output-names = "osc_32k";
+	};
 
 };
 
@@ -848,8 +865,8 @@
 			ldo2:LDO2 {
 				regulator-name = "VCC_LDO2_1V8";
 				regulator-always-on;
-				regulator-min-microvolt = <1800000>;
-				regulator-max-microvolt = <1800000>;
+				regulator-min-microvolt = <3300000>;
+				regulator-max-microvolt = <3300000>;
 			};
 			
 			ldo3:LDO3 {

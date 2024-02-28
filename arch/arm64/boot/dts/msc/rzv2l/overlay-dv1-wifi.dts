@@ -1,0 +1,39 @@
+/*
+ * Copyright (C) 2022 Avnet Embedded GmbH
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation version 2.
+ *
+ * This program is distributed "as is" WITHOUT ANY WARRANTY of any
+ * kind, whether express or implied; without even the implied warranty
+ * of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ */
+
+/dts-v1/;
+/plugin/;
+
+/ {
+        fragment@5000 {
+                target = <&sdhi0>;
+                __overlay__ {
+					#address-cells = <1>;
+					#size-cells = <0>;
+					pinctrl-0 = <&sdhi0_pins>;
+					pinctrl-names = "default";
+					vmmc-supply = <&reg_3p3v>;
+					vqmmc-supply = <&vccq_sdhi0>;
+					bus-width = <4>;
+					no-1-8-v;       /* force 3.3V VIO */
+					non-removable;
+					disable-wp;
+					mmc-pwrseq = <&wlan_pwrseq>;
+					pm-ignore-notify;
+					cap-power-off-card;
+					/* WiFi firmware requires power to be kept while in suspend */
+					keep-power-in-suspend;
+					status = "okay";
+                };
+        };
+};
